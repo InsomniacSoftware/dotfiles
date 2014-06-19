@@ -1,0 +1,20 @@
+umask 0077
+
+_SYSPATH=$PATH
+PATH=/usr/local/bin
+PATH=$PATH:/usr/local/sbin
+PATH=$PATH:/usr/libexec
+PATH=$PATH:$_SYSPATH
+PATH=$PATH:$HOME/bin
+PATH=$PATH:$HOME/.bashrc.d
+export PATH
+unset _SYSPATH
+
+MANPATH=$MANPATH:/usr/share/man
+MANPATH=$MANPATH:/usr/local/man
+MANPATH=$MANPATH:/usr/local/share/man
+export MANPATH
+
+# Simple variable set for other scripts to know if this is an OSX system
+[[ $(uname -s) =~ "Darwin" ]] && export _isOSX=1;
+

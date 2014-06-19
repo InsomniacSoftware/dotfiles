@@ -1,0 +1,103 @@
+
+# Adds an empty space to the end of the Dock
+alias addDockSpace='defaults write com.apple.dock persistent-apps -array-add '"'"'{tile-data={}; tile-type="spacer-tile";}'"'"'; killall Dock'
+
+# Display the battery status
+alias battstat='ioreg -n "AppleSmartBatteryManager" -r -l'
+
+# The configure program fails when the shell has color
+alias configure="unset CLICOLOR_FORCE; command configure $@"
+
+# CLI method to search using Dash
+alias dash="open dash://"
+
+# Recursively deletes all .DS_Store files starting in the current directory
+alias dsclean="find . -name '*.DS_Store' -type f -ls -delete"
+
+# Find a file with pattern (argument) in the name, starting from current dir
+alias ff="find . -type f -iname '*'$*'*' -ls"
+
+# Flushes the DNS cache
+alias flushdns='dscacheutil -flushcache'
+
+### git extras taken from from http://tjholowaychuk.com/post/26904939933/git-extras-introduction-screencast
+# Change working directory to root of current git repo
+alias gitcd='cd "`git rev-parse --show-toplevel`"'
+
+# Preferred output of git log
+alias gitlog="git log --pretty='format:%Cgreen%h%Creset %an - %s : %N' --graph"
+
+# Update my work onto master
+alias gitupdate='git checkout master && git pull && git checkout - && git rebase master'
+
+# Preferred output format of lsof
+alias lsof='/usr/sbin/lsof +c0 -s'
+
+### ls adjustments
+alias ll="LC_COLLATE=en_BE ls -laBF"
+  # Set preferred sort collate
+  # Long listing of all files
+  # Print non-printable chars in octal
+  # Print trailing char of type (/*@=%|)
+
+alias lg='ll | grep'
+  # Run ll and call grep
+
+alias lh='ll -h'
+  # h: Display file sizes in human friendly format
+
+[ $_isOSX ] && alias l@='ll -@O'
+  # Only on OSX systems
+  # @: Display extended attribute keys and sizes
+  # O: Display the file flags (ie, hidden)
+
+alias ltr='ll -tr'
+  # t: Sort by time
+  # r: Reversed sorting
+
+# Prints out the external IP address
+alias myip='/usr/bin/curl ifconfig.me'
+
+# Simplied netstat output (IPv4 routes except localhost, VMs, unroutable)
+alias mynetstat='netstat -nr -f inet | grep -v "lo0\|vnic1\|169.254"'
+
+# PS in my preferred format
+alias myps='/bin/ps -Ao user,ppid,pid,%cpu,time,command'
+
+# Preferred rsync options
+alias myrsync="rsync --exclude='*.Spotlight*' -rlptgoD -vv -hi --stats --progress"
+
+# Strip out comments and empty lines
+alias nocomm='grep -v "#\|^$"'
+
+# Preferred output format of od
+alias odump='od -Ad -tax1'
+
+# Immediately enables the screen saver (Doesn't lock)
+alias poopin='/System/Library/CoreServices/"Menu Extras"/User.menu/Contents/Resources/CGSession -suspend'
+
+# Simple yes/no if an address is reachable
+alias reach='scutil -r'
+
+# Reboot the modem because Comcast sucks (URL is for a Motorola SB6120)
+alias rebootModem='/usr/local/bin/wget --tries=1 -O /dev/null "http://192.168.100.1/reset.htm?reset_modem=Restart+Cable+Modem"'
+
+# Rebuild the known executable file hash
+alias rehash='hash -r'
+
+# Rerun the last command using sudo
+alias sandwich='sudo $(history -p !!)'
+
+# Show/Hide desktop icons
+alias showicons="defaults write com.apple.Finder CreateDesktop -bool true; killall {Total,}Finder; open -a TotalFinder.app"
+alias hideicons="defaults write com.apple.Finder CreateDesktop -bool false; killall {Total,}Finder; open -a TotalFinder.app"
+
+# Load in the bash history from other terminals
+alias u='history -n'
+
+# Remove the Quarantine flag for downloaded files
+alias unquarantine='xattr -r -d com.apple.quarantine'
+
+# Better method to determine what a command does
+alias which='command -V'
+

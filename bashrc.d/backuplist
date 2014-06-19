@@ -1,0 +1,95 @@
+#!/bin/bash
+# Front-end to manage the Apple Backup ExcludeItem list in Spotlight meta database
+# which is used not only by TimeMachine but most 3rd party backup programs
+
+# Uses 'tag' from https://github.com/jdberry/tag/ to set/remove the Excluded tag
+
+# If you want the ability to right-click a file in the Finder to add/delete,
+# create 2 automator workflows to call this shell script with either the
+# add or delete argument and configured to pass files as remaining arguments.
+
+
+RETVAL=0
+
+list() {
+# List all files in the meta database with the 'backup exclude' tag
+# Requires sudo access because the list contains other users' files
+  RETVAL=0
+  if [[ $# -eq 0 ]]; then
+    sudo mdfind "com_apple_backup_excludeItem = 'com.apple.backupd'" | sort
+  else
+    sudo mdfind "com_apple_backup_excludeItem = 'com.apple.backupd'" | sort | grep --color=never -i -e "$1"
+    RETVAL=$?
+  fi
+}
+
+add() {
+# Add files to the Exclude list
+# TODO: check if passed is a file or folder.  If folder, run recursively
+  RETVAL=0
+  for v in "$@"
+  do
+    ABSPATH=$( cd $(dirname $v); pwd)/$(basename $v)
+    /usr/bin/xattr -v -w com.apple.metadata:com_apple_backup_excludeItem 'com.apple.backupd' "$v" &&
+      /usr/local/bin/tag -a Excluded "$v"
+    RETVAL=$((RETVAL+$?))
+  done
+}
+
+delete() {
+  RETVAL=0
+  for v in "$@"
+  do
+    ABSPATH=$( cd $(dirname $v); pwd)/$(basename $v)
+    /usr/bin/xattr -v -d com.apple.metadata:com_apple_backup_excludeItem "$v" &&
+      /usr/local/bin/tag -r Excluded "$v"
+    RETVAL=$((RETVAL+$?))
+  done
+}
+
+help() {
+  printf %s '
+Usage: backuplist [-?|--help]
+       backuplist filename
+       backuplist [add|delete] filename [filename ...]
+
+Description: Manage the Apple Backup ExcludeItem list in the
+    Spotlight meta database.  This DB is used by TimeMachine
+    and many 3rd party backup utilities.
+
+    0 arguments:   Displays all entries
+    1 argument:    Performs a wildcard search of the database
+    >1 arguments:  Adds or Deletes entries from the database
+
+Note: Searching/listing requires sudo access because the list
+    may contains other user files.
+
+Options:
+    -?|--help      Displays this help message
+    add            Adds the file to the database
+    delete         Removes the file from the database
+'
+  RETVAL=1
+}
+
+case "$1" in
+  add)
+      shift
+      add "$@"
+      ;;
+  delete)
+      shift
+      delete "$@"
+      ;;
+  --help)
+      help
+      ;;
+  -\?)
+      help
+      ;;
+  *)
+      list "$@"
+      ;;
+esac
+
+exit $RETVAL

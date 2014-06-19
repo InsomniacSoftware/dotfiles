@@ -1,0 +1,72 @@
+
+### Finder Frontmost window functions
+# Applescript Utility function to grab path to the frontmost Finder window
+function __ff
+{
+  osascript -e 'tell application "Finder"'\
+    -e "if (${1-1} <= (count Finder windows)) then"\
+    -e "get POSIX path of (target of window ${1-1} as alias)"\
+    -e 'else' -e 'get POSIX path of (desktop as alias)'\
+    -e 'end if' -e 'end tell';
+}
+# Change working directory to Frontmost Finder window
+function cdff
+{
+  cd "`__ff`"
+}
+# Copy the Frontmost Finder window to the pasteboard
+function pwdff
+{
+  echo -ne "`__ff $@`" | pbcopy
+}
+
+
+# Make a directory and immediately cd into it
+function mkcd()
+{
+  mkdir -p "$@" && cd "$_"
+}
+
+# Remap 'cd' to a cd history.  Use cd -- to list, cd -# to change
+function cd_func {
+  local x2 the_new_dir adir index; local -i cnt;
+  if [[ "$1" ==  "--" ]]; then dirs -v; return 0; fi;
+  the_new_dir=$1; [[ -z $1 ]] && the_new_dir=$HOME;
+  if [[ "${the_new_dir:0:1}" == '-' ]];
+    then index=${the_new_dir:1}; [[ -z $index ]] && index=1; adir=$(dirs +$index); [[ -z $adir ]] && return 1; the_new_dir=$adir;
+  fi;
+  [[ "${the_new_dir:0:1}" == '~' ]] && the_new_dir="${HOME}${the_new_dir:1}";
+  pushd "${the_new_dir}" > /dev/null; [[ $? -ne 0 ]] && return 1;
+  the_new_dir=$(pwd);
+  for ((cnt=1; cnt <= 10; cnt++)); do
+    x2=$(dirs +${cnt} 2>/dev/null);
+    [[ $? -ne 0 ]] && return 0;
+    [[ "${x2:0:1}" == '~' ]] && x2="${HOME}${x2:1}";
+    if [[ "${x2}" == "${the_new_dir}" ]]; then popd -n +$cnt >/dev/null 2>&1; ((cnt--)); fi;
+  done;
+  popd -n +11 >/dev/null 2>&1;
+  return 0;
+}; alias cd=cd_func;
+
+
+# grep to show line numbers only when STDIN and STDOUT via a terminal (no pipes)
+function grep()
+{
+    if [[ -t 0 && -t 1 ]]; then
+        command grep -n "$@"
+    else
+        command grep "$@"
+    fi
+}
+
+# Set curl to send output to a file instead of STDOUT when I forget
+function curl()
+{
+    if [[ -t 1 ]]; then
+        command curl -O "$@"
+    else
+        command curl "$@"
+    fi
+}
+
+

@@ -1,0 +1,46 @@
+# Clear any previous PROMPT_COMMAND and PS1 configurations
+export -n PROMPT_COMMAND;
+export -n PS1; PS1='\u@\h:\w> ';
+
+# Source and run the ANSIColors function
+. ${HOME}/.bashrc.d/4_colors.rc
+__ANSIColors
+
+
+function __updateTitlebar {
+  local _w _x; _w="${PWD}" _x=$((${#_w}-20));
+  test ${#_w} -le 20 || _w="...${_w#$(printf "%.*s" $_x "$_w")}";
+  printf "\[\e]0;${USER}@${HOST}:${_w}\007\]";
+}
+
+
+function __getShellLevel {
+## get shell level; set CTRL-D appropriately
+  if [[ "$SHLVL" -eq 1 && "$(/bin/ps -p $PPID -o comm='')" == "login" ]];
+    then eval $1="'${ANSIRedBold}exit<${ANSINorm}'"; eval $2="'-'";
+    else eval $1="'${ANSICyan}$(ps -p $PPID -o ruser='')${ANSIGreen}<${ANSINorm}'"; eval $2="'+'";
+  fi;
+};
+
+function __fancy_prompt {
+  history -a;
+## Check CLICOLOR value for ANSI color variables
+  [[ $(( $([ -z "${ANSIRed}" ]; echo $?;)^$([ -z "${CLICOLOR}" ]; echo $?;) )) -ne 0 ]] && __ANSIColors;
+  local _TITLEBAR="$(__updateTitlebar)";
+  local _RETURNCOLOR="${ANSIGreenBold}"; [[ "$RET" -ne 0 ]] && _RETURNCOLOR="${ANSIRedBold}";
+  local _eofValue="-"; __getShellLevel _SHELLLEVEL _eofValue; set ${_eofValue}o ignoreeof;
+## Date and Time
+  local _GMTTIME="$(/bin/date -u +"%Y/%m/%d-%H:%M%Z")" _LOCALTIME="$(/bin/date +"%Y-%m-%d %H:%M%Z")";
+  [[ "10#${_GMTTIME:8:2}" -eq "10#${_LOCALTIME:8:2}" ]] && _GMTTIME="${_GMTTIME:11:8}";
+  local _DATETIME="${_RETURNCOLOR}${_LOCALTIME}${ANSINorm} (${ANSIBlueBold}${_GMTTIME}${ANSINorm})";
+  local _GIT="$([ `type -t __git_ps1`"" == 'function' ] && echo "${ANSICyan}$(__git_ps1 " [%s]")${ANSINorm}")";
+  local _PWD="${ANSIYellowBold}"$PWD"${ANSINorm}";
+  local _USERCOLOR=$( [[ "$UID" -eq "0" ]] && printf "$ANSIRed" || printf "$ANSICyan" );
+  local _USER="${_USERCOLOR}$USER${ANSINorm}";
+  local _HOST="${ANSIBlue:-}$HOST${ANSINorm:-}";
+
+  PS1="${_TITLEBAR}\n${_DATETIME}${_GIT} ${_PWD}\n${_SHELLLEVEL}${_USER}@${_HOST}\\$ ";
+};
+PROMPT_COMMAND='RET=$?;__fancy_prompt;'
+
+

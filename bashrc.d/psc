@@ -1,0 +1,40 @@
+#!/bin/bash
+# Colorize the output of 'ps'
+
+# Set up the ANSI color codes
+ANSIRed=$(tput sgr0 && tput setaf 1)
+ANSIGreen=$(tput sgr0 && tput setaf 2)
+ANSIYellow=$(tput sgr0 && tput setaf 3)
+ANSIBlue=$(tput sgr0 && tput setaf 4)
+ANSIMagenta=$(tput sgr0 && tput setaf 5)
+ANSICyan=$(tput sgr0 && tput setaf 6)
+ANSIWhite=$(tput sgr0 && tput setaf 7)
+ANSIBlackBold=$(tput sgr0 && tput setaf 0 && tput bold)
+ANSIRedBold=$(tput sgr0 && tput setaf 1 && tput bold)
+ANSIGreenBold=$(tput sgr0 && tput setaf 2 && tput bold)
+ANSIYellowBold=$(tput sgr0 && tput setaf 3 && tput bold)
+ANSIBlueBold=$(tput sgr0 && tput setaf 4 && tput bold)
+ANSIMagentaBold=$(tput sgr0 && tput setaf 5 && tput bold)
+ANSICyanBold=$(tput sgr0 && tput setaf 6 && tput bold)
+ANSIWhiteBold=$(tput sgr0 && tput setaf 7 && tput bold)
+ANSINorm=$(tput sgr0)
+
+# Always print the header row
+# Don't print this process
+# If the user field = root, print in Red
+# If the user field = the current user, print in Green
+# If the user field is anyone else, print in Cyan
+# Print the command (up to the first space) in Yellow
+
+/bin/ps -o user,ppid,pid,%cpu,time,command $@ | awk ' {
+    if (NR == 1) { print; next; }
+    if ($0 ~ "awk" && $0 ~ "psc_child") next;
+    if ($1 ~ "root")
+      sub(/[^[:space:]]+/, "'${ANSIRed}'"$1"'${ANSINorm}'");
+    else if ($1 ~ "'$USER'" && n !~ "root")
+      sub(/[^[:space:]]+/, "'${ANSIGreen}'"$1"'${ANSINorm}'");
+    else
+      sub(/[^[:space:]]+/, "'${ANSICyan}'"$1"'${ANSINorm}'");
+    sub($6, "'${ANSIYellow}'"$6"'${ANSINorm}'");
+  print
+}'

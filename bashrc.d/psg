@@ -1,0 +1,16 @@
+#!/bin/bash
+# Call ps and grep for arguments in an OR format
+# Example: psg shared agent
+# Returns: ps lines containing either 'shared' or 'agent'
+
+argv=("$@");
+argc=${#argv[@]};
+a="";
+for ((i=0; i<$argc; i++ ))
+do
+    a=$a${argv[${i}]};
+    if [ $i -ne $(($argc-1)) ]; then
+        a=$a"|";
+    fi;
+done;
+/bin/ps -Ao user,ppid,pid,%cpu,time,command | egrep -v 'egrep|psg' | egrep -i $a

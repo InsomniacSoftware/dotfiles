@@ -1,0 +1,34 @@
+function __ANSIColors {
+  local ESCLB='\[' ESCRB='\]' _colorNum=30 _levelNum=0;
+  ANSINorm="\[\e[0m\]";
+  for _color in Black Red Green Yellow Blue Magenta Cyan White; do
+    for _level in '' Bold; do
+      if [[ -n "${CLICOLOR}" ]];
+        then eval ANSI${_color}${_level}='${ESCLB}\\e[${_levelNum}\;${_colorNum}m${ESCRB}';
+        else eval unset ANSI${_color}${_level} ANSINorm;
+      fi;
+      let _levelNum++;
+    done;
+    let _colorNum++; _levelNum=0;
+  done;
+};
+
+# function __ANSIColors {
+#   ANSIBlack=$(tput sgr0 && tput setaf 0)
+#   ANSIRed=$(tput sgr0 && tput setaf 1)
+#   ANSIGreen=$(tput sgr0 && tput setaf 2)
+#   ANSIYellow=$(tput sgr0 && tput setaf 3)
+#   ANSIBlue=$(tput sgr0 && tput setaf 4)
+#   ANSIMagenta=$(tput sgr0 && tput setaf 5)
+#   ANSICyan=$(tput sgr0 && tput setaf 6)
+#   ANSIWhite=$(tput sgr0 && tput setaf 7)
+#   ANSIBlackBold=$(tput sgr0 && tput setaf 0 && tput bold)
+#   ANSIRedBold=$(tput sgr0 && tput setaf 1 && tput bold)
+#   ANSIGreenBold=$(tput sgr0 && tput setaf 2 && tput bold)
+#   ANSIYellowBold=$(tput sgr0 && tput setaf 3 && tput bold)
+#   ANSIBlueBold=$(tput sgr0 && tput setaf 4 && tput bold)
+#   ANSIMagentaBold=$(tput sgr0 && tput setaf 5 && tput bold)
+#   ANSICyanBold=$(tput sgr0 && tput setaf 6 && tput bold)
+#   ANSIWhiteBold=$(tput sgr0 && tput setaf 7 && tput bold)
+#   ANSINorm=$(tput sgr0)
+# }; __ANSIColors;
