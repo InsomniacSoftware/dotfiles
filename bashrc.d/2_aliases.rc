@@ -14,9 +14,6 @@ alias dash="open dash://"
 # Recursively deletes all .DS_Store files starting in the current directory
 alias dsclean="find . -name '*.DS_Store' -type f -ls -delete"
 
-# Find a file with pattern (argument) in the name, starting from current dir
-alias ff="find . -type f -iname '*'$*'*' -ls"
-
 # Flushes the DNS cache
 alias flushdns='dscacheutil -flushcache'
 

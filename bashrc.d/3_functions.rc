@@ -69,4 +69,9 @@ function curl()
     fi
 }
 
+# Find a file with pattern (argument) in the name, starting from current dir
+function ff()
+{
+    find . -type f -iname '*'$*'*' -ls
+}
 
