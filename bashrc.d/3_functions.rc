@@ -50,14 +50,14 @@ function cd_func {
 
 
 # grep to show line numbers only when STDIN and STDOUT via a terminal (no pipes)
-function grep()
-{
-    if [[ -t 0 && -t 1 ]]; then
-        command grep -n "$@"
-    else
-        command grep "$@"
-    fi
-}
+#function grep()
+#{
+#    if [[ -t 0 && -t 1 ]]; then
+#        command grep -n "$@"
+#    else
+#        command grep "$@"
+#    fi
+#}
 
 # Set curl to send output to a file instead of STDOUT when I forget
 function curl()
