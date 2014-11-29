@@ -1,9 +1,7 @@
 # load the bash completion scripts
-if [ -f $(brew --prefix)/etc/bash_completion ]; then
-  source $(brew --prefix)/etc/bash_completion
-fi
+[ -f $(brew --prefix)/etc/bash_completion ] && source $(brew --prefix)/etc/bash_completion
 
 # load in z dir tracking. https://github.com/rupa/z
 _Z_DATA="$HOME/Library/Caches/z.db"
-source /usr/local/etc/profile.d/z.sh || unset _Z_DATA;
+[ -f /usr/local/etc/profile.d/z.sh ] && source /usr/local/etc/profile.d/z.sh || unset _Z_DATA;
 
