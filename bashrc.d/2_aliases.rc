@@ -35,7 +35,7 @@ alias ll="LC_COLLATE=en_BE ls -laBF"
   # Set preferred sort collate
   # Long listing of all files
   # Print non-printable chars in octal
-  # Print trailing char of type (/*@=%|)
+  # Print trailing char of type (@*=/%|)
 
 alias lg='ll | grep'
   # Run ll and call grep
@@ -53,7 +53,7 @@ alias ltr='ll -tr'
   # r: Reversed sorting
 
 # Prints out the external IP address
-alias myip='/usr/bin/curl ifconfig.me'
+alias myip='/usr/bin/curl ipinfo.io/ip'
 
 # Simplied netstat output (IPv4 routes except localhost, VMs, unroutable)
 alias mynetstat='netstat -nr -f inet | grep -v "lo0\|vnic1\|169.254"'
