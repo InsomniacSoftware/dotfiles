@@ -5,3 +5,7 @@
 _Z_DATA="$HOME/Library/Caches/z.db"
 [ -f /usr/local/etc/profile.d/z.sh ] && source /usr/local/etc/profile.d/z.sh || unset _Z_DATA;
 
+# load Python virtualenvwrapper
+[ -d $HOME/.virtualenvs ] && export WORKON_HOME=$HOME/.virtualenvs
+[ -f /usr/local/bin/virtualenvwrapper.sh ] && source /usr/local/bin/virtualenvwrapper.sh
+

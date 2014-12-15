@@ -31,16 +31,19 @@ function __fancy_prompt {
   local _RETURNCOLOR="${ANSIGreenBold}"; [[ "$RET" -ne 0 ]] && _RETURNCOLOR="${ANSIRedBold}";
   local _eofValue="-"; __getShellLevel _SHELLLEVEL _eofValue; set ${_eofValue}o ignoreeof;
 ## Date and Time
-  local _GMTTIME="$(/bin/date -u +"%Y/%m/%d-%H:%M%Z")" _LOCALTIME="$(/bin/date +"%Y-%m-%d %H:%M%Z")";
-  [[ "10#${_GMTTIME:8:2}" -eq "10#${_LOCALTIME:8:2}" ]] && _GMTTIME="${_GMTTIME:11:8}";
-  local _DATETIME="${_RETURNCOLOR}${_LOCALTIME}${ANSINorm} (${ANSIBlueBold}${_GMTTIME}${ANSINorm})";
-  local _GIT="$([ `type -t __git_ps1`"" == 'function' ] && echo "${ANSICyan}$(__git_ps1 " [%s]")${ANSINorm}")";
-  local _PWD="${ANSIYellowBold}"$PWD"${ANSINorm}";
+  local _GMTTIME=$(/bin/date -u +"%Y/%m/%d-%H:%M") _LOCALTIME=$(/bin/date +"%Y-%m-%d %H:%M%Z");
+  [[ "10#${_GMTTIME:8:2}" -eq "10#${_LOCALTIME:8:2}" ]] && _GMTTIME="${_GMTTIME:11:5}";
+  local _DATETIME="${_RETURNCOLOR}${_LOCALTIME}${ANSINorm}${ANSIBlueBold}(${_GMTTIME})${ANSINorm}";
+## Python virtual environment
+  local _VENV=$([ "$VIRTUAL_ENV" != "" ] && echo "${ANSIMagenta}(V:$(basename "$VIRTUAL_ENV"))${ANSINorm}");
+## git branch
+  local _GIT=$([ `type -t __git_ps1`"" == 'function' ] && echo "${ANSICyan}$(__git_ps1 "[%s]")${ANSINorm}");
+  local _PWD=" ${ANSIYellowBold}"$PWD"${ANSINorm}";
   local _USERCOLOR=$( [[ "$UID" -eq "0" ]] && printf "$ANSIRed" || printf "$ANSICyan" );
   local _USER="${_USERCOLOR}$USER${ANSINorm}";
   local _HOST="${ANSIBlue:-}$HOST${ANSINorm:-}";
 
-  PS1="${_TITLEBAR}\n${_DATETIME}${_GIT} ${_PWD}\n${_SHELLLEVEL}${_USER}@${_HOST}\\$ ";
+  PS1="${_TITLEBAR}\n${_DATETIME}${_VENV}${_GIT}${_PWD}\n${_SHELLLEVEL}${_USER}@${_HOST}\\$ ";
 };
 PROMPT_COMMAND='RET=$?;__fancy_prompt;'
 
