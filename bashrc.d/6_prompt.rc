@@ -16,7 +16,8 @@ function __updateTitlebar {
 
 function __getShellLevel {
 ## get shell level; set CTRL-D appropriately
-  if [[ "$SHLVL" -eq 1 && "$(/bin/ps -p $PPID -o comm='')" == "login" ]];
+  local _PPROC=$(/bin/ps -p $PPID -o comm='');
+  if [[ "$SHLVL" -eq 1 && ("$_PPROC" =~ "sshd" || "$_PPROC" =~ "login") ]];
     then eval $1="'${ANSIRedBold}exit<${ANSINorm}'"; eval $2="'-'";
     else eval $1="'${ANSICyan}$(ps -p $PPID -o ruser='')${ANSIGreen}<${ANSINorm}'"; eval $2="'+'";
   fi;
