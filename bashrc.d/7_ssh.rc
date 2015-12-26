@@ -1,3 +1,4 @@
 # Less restrictive SSH for initial connections
 alias nssh='ssh -o StrictHostKeyChecking=false -o UserKnownHostsFile=~/.ssh/tmp'
+alias nscp='scp -o StrictHostKeyChecking=false -o UserKnownHostsFile=~/.ssh/tmp'
 
