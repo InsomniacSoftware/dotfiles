@@ -33,9 +33,10 @@ alias lsof='/usr/sbin/lsof +c0 -s'
 ### ls adjustments
 alias ll="LC_COLLATE=en_BE ls -laBF"
   # Set preferred sort collate
-  # Long listing of all files
-  # Print non-printable chars in octal
-  # Print trailing char of type (@*=/%|)
+  # la: Long listing of all files
+  # B: Print non-printable chars in octal
+  # F: Print trailing char of type (@*=/%|)
+  # L: Dereference symbolic links
 
 alias lg='ll | grep'
   # Run ll and call grep
@@ -43,10 +44,12 @@ alias lg='ll | grep'
 alias lh='ll -h'
   # h: Display file sizes in human friendly format
 
-[ $_isOSX ] && alias l@='ll -@O'
-  # Only on OSX systems
-  # @: Display extended attribute keys and sizes
-  # O: Display the file flags (ie, hidden)
+# Only on OSX systems
+[ $_isOSX ] && {
+  alias l@='ll -@O'
+    # @: Display extended attribute keys and sizes
+    # O: Display the file flags (ie, hidden)
+}
 
 alias ltr='ll -tr'
   # t: Sort by time
@@ -62,7 +65,7 @@ alias mynetstat='netstat -nr -f inet | grep -v "lo0\|vnic1\|169.254"'
 alias myps='/bin/ps -Ao user,ppid,pid,%cpu,time,command'
 
 # Preferred rsync options
-alias myrsync="rsync --exclude='*.Spotlight*' -rlptgoD -vv -hi --stats --progress"
+alias myrsync="rsync -rlptgoD -vv -hi --stats --progress"
 
 # Strip out comments and empty lines
 alias nocomm='grep -v "#\|^$"'
@@ -97,4 +100,17 @@ alias unquarantine='xattr -r -d com.apple.quarantine'
 
 # Better method to determine what a command does
 alias which='command -V'
+
+# Supress banner output of ffmpeg/ffprobe
+alias ffmpeg='ffmpeg -hide_banner'
+alias ffprobe='ffprobe -hide_banner'
+
+# Recursively reset file/dir permissions
+alias fixdirperms='chmod -R ug+rwX,o+rX,o-w .'
+
+# Kill the newest SecurityAgent process when it locks up KeyChain
+alias fixkeychain='sudo pkill -n SecurityAgent'
+
+# Print envrionment variables sorted
+alias envs='env|sort'
 
