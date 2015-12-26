@@ -1,0 +1,49 @@
+### Key Bindings
+
+## History searching using up/down arrow keys
+"\e[A": history-search-backward
+"\e[B": history-search-forward
+
+## Text shortcut to send to null
+Control-n: ">/dev/null 2>&1"
+
+## edit the path
+"\C-xp": "PATH=${PATH}\e\C-e\C-a\ef\C-f"
+
+## Add a binding to refresh the line, which is unbound
+"\C-xr": redraw-current-line
+
+
+### Tab completion options
+
+## show comps with trailing char
+set visible-stats on
+## case insensitive matching
+set completion-ignore-case on
+## immediately show instead of ringing bell
+set show-all-if-ambiguous on
+
+
+## These awesome options don't work in the OSX BSD readline.  GRRRR!!
+## History searching using shift up/down arrow keys for substring searches
+#"\e[1;2[A": history-substr-search-backward
+#"\e[1;2[B": history-substr-search-forward
+
+## show comps in color
+# set colored-stats on
+## case -_ insensitive matching
+# set completion-map-case on
+## turn off pager for long completions
+# set page-completions off
+## if completing within a word, only add text up to the insertion point. (foo^bar = foobar ! foofoobar)
+# set skip-completed-text on
+
+
+### Helpful commands to see current settings
+# bind -p # Equivalent to dump-functions [machine readable]
+# bind -P # Equivalent to dump-functions [human readable]
+# bind -s # Equivalent to dump-macros    [machine readable]
+# bind -S # Equivalent to dump-macros    [human readable]
+# bind -v # Equivalent to dump-variables [machine readable]
+# bind -V # Equivalent to dump-variables [human readable]
+
