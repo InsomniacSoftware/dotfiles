@@ -3,8 +3,10 @@ export -n PROMPT_COMMAND;
 export -n PS1; PS1='\u@\h:\w> ';
 
 # Source and run the ANSIColors function
-. ${HOME}/.bashrc.d/4_colors.rc
-__ANSIColors
+[[ -e ${HOME}/.bashrc.d/4_colors.rc ]] && {
+  . ${HOME}/.bashrc.d/4_colors.rc
+  __ANSIColors
+}
 
 
 function __updateTitlebar {
@@ -13,13 +15,18 @@ function __updateTitlebar {
   printf "\[\e]0;${USER}@${HOST}:${_w}\007\]";
 }
 
-
 function __getShellLevel {
 ## get shell level; set CTRL-D appropriately
-  local _PPROC=$(/bin/ps -p $PPID -o comm='');
-  if [[ "$SHLVL" -eq 1 && ("$_PPROC" =~ "sshd" || "$_PPROC" =~ "login") ]];
-    then eval $1="'${ANSIRedBold}exit<${ANSINorm}'"; eval $2="'-'";
-    else eval $1="'${ANSICyan}$(ps -p $PPID -o ruser='')${ANSIGreen}<${ANSINorm}'"; eval $2="'+'";
+  local ppid=$PPID
+  local pproc=$(/bin/ps -p $ppid -o comm='')
+  local i=5
+  while [[ $pproc =~ "su" || $pproc =~ "sudo" ]]; do
+    ppid=$(/bin/ps -p $ppid -o ppid=''); pproc=$(/bin/ps -p $ppid -o comm='');
+    let $(( i-- )); [[ $i ]] || break;
+  done;
+  if [[ "$SHLVL" -eq 1 && ( $pproc =~ "sshd" || $pproc =~ "login") ]];
+    then eval $1="'${ANSIRedBold}exit<${ANSINorm}'"; IGNOREEOF=2;
+    else eval $1="'${ANSICyan}$(ps -p $ppid -o ruser='')${ANSIGreen}<${ANSINorm}'"; unset IGNOREEOF;
   fi;
 };
 
