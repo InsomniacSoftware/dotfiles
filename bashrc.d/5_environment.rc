@@ -63,3 +63,5 @@ then
   stty -ixon
 fi
 
+# Set default cpanminus options
+export PERL_CPANM_OPT="--prompt --local-lib /usr/local"
