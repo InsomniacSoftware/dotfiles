@@ -17,3 +17,9 @@ _Z_DATA="$HOME/Library/Caches/z.db"
 }
 
 
+# Clear bashrc timing flag file
+[ -f "${HOME}/.bashtime" ] && rm "${HOME}/.bashtime"
+
+# Always exit with success
+true
+

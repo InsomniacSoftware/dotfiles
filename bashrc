@@ -8,5 +8,15 @@
 [ -f /usr/local/etc/bashrc ] && . /usr/local/etc/bashrc
 
 # load my bashrc files
-for scr in ${HOME}/.bashrc.d/*.rc ; do test -r "${scr}" && source "${scr}"; done;
+for rcfile in ${HOME}/.bashrc.d/*.rc ; do
+  if [ -f ${HOME}/.bashtime ]; then
+  {
+    echo -n "Loading ${rcfile}"
+    time source "${rcfile}"
+    echo ""
+  } else {
+    source "${rcfile}"
+  }
+  fi;
+done;
 
