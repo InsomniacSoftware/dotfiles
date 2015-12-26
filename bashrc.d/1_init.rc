@@ -1,14 +1,25 @@
 umask 0022
 
-_SYSPATH=$PATH
-PATH=/usr/local/bin
-PATH=$PATH:/usr/local/sbin
-PATH=$PATH:/usr/libexec
-PATH=$PATH:$_SYSPATH
-PATH=$PATH:$HOME/bin
-PATH=$PATH:$HOME/.bashrc.d
+__build_path() {
+  local path sep
+  local -a patharray
+  path=$path:/usr/local/bin
+  path=$path:/usr/local/sbin
+  path=$path:$HOME/bin
+  path=$path:/usr/bin:/bin
+  path=$path:/usr/sbin:/sbin
+  path=$path:/usr/libexec
+  IFS=: builtin read -r${BASH_VERSION+a} patharray <<< "$path"
+  for path in "${patharray[@]}" ; do
+    case "$path" in
+      ('') ;;
+      (*) printf '%s' "$sep$path"; sep=: ;;
+    esac
+  done
+}
+unset PATH
+PATH=$(__build_path)
 export PATH
-unset _SYSPATH
 
 MANPATH=$MANPATH:/usr/share/man
 MANPATH=$MANPATH:/usr/local/man
