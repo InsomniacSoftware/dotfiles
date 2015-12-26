@@ -1,2 +1,2 @@
-[ -r ~/.bashrc ] && . ~/.bashrc
+[ -r ${HOME}/.bashrc ] && . ${HOME}/.bashrc
 
