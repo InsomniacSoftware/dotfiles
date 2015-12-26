@@ -1,4 +1,4 @@
-umask 0077
+umask 0022
 
 _SYSPATH=$PATH
 PATH=/usr/local/bin
