@@ -20,6 +20,9 @@ for x in \
   bash_profile \
   bashrc \
   bashrc.d \
+  gitattributes \
+  gitignore \
+  inputrc \
 ; do
   test -e ".${x}" && mv ".${x}" ".${x}.bak"
   ln -s "${DOTDIR}/${x}" ".${x}"
