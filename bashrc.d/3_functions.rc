@@ -75,3 +75,8 @@ function ff()
     find . -type f -iname '*'$*'*' -ls
 }
 
+# List the resource fork of a file
+function lrf()
+{
+    ll ${@}/..namedfork/rsrc
+}
