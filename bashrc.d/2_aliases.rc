@@ -65,7 +65,7 @@ alias mynetstat='netstat -nr -f inet | grep -v "lo0\|vnic1\|169.254"'
 alias myps='/bin/ps -Ao user,ppid,pid,%cpu,time,command'
 
 # Preferred rsync options
-alias myrsync="rsync -rlptgoD -vv -hi --stats --progress"
+alias myrsync='rsync --archive --update --human-readable --itemize-changes --sparse --stats --progress --exclude-from="$HOME/Library/Preferences/rsync.excludes" --chown=jeff:staff'
 
 # Strip out comments and empty lines
 alias nocomm='grep -v "#\|^$"'
