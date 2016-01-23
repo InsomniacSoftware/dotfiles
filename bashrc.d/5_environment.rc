@@ -63,5 +63,10 @@ then
   stty -ixon
 fi
 
-# Set default cpanminus options
-export PERL_CPANM_OPT="--prompt --local-lib /usr/local"
+# Set local Perl variables
+PATH="/usr/local/perl5/bin${PATH+:}${PATH}"; export PATH;
+PERL5LIB="/usr/local/perl5/lib/perl5${PERL5LIB+:}${PERL5LIB}"; export PERL5LIB;
+PERL_LOCAL_LIB_ROOT="/usr/local/perl5${PERL_LOCAL_LIB_ROOT+:}${PERL_LOCAL_LIB_ROOT}"; export PERL_LOCAL_LIB_ROOT;
+#PERL_MB_OPT="--install_base \"/usr/local/perl5\""; export PERL_MB_OPT;
+#PERL_MM_OPT="INSTALL_BASE=/usr/local/perl5"; export PERL_MM_OPT;
+
