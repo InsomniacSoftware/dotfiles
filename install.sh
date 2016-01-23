@@ -21,12 +21,14 @@ for x in \
   bashrc \
   bashrc.d \
   gitattributes \
-  gitignore \
   inputrc \
 ; do
   test -e ".${x}" && mv ".${x}" ".${x}.bak"
   ln -s "${DOTDIR}/${x}" ".${x}"
 done
 
-
+test -e ".config/git/ignore" || {
+  mkdir -p .config/git/ 2>/dev/null
+  cp "${DOTDIR}/gitignore" .config/git/ignore
+}
 
